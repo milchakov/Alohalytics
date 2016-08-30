@@ -434,6 +434,14 @@ bool HTTPClientPlatformWrapper::RunHTTPRequest() {
     server_cookies_ = normalize_server_cookies(std::move(env.ToStdString(jniServerCookies.get())));
   }
 
+  static auto const etagField = env->GetFieldID(g_httpParamsClass, "eTag", "Ljava/lang/String;");
+  auto const jniEtag =
+      MakePointerScopeGuard(static_cast<jstring>(env->GetObjectField(response, etagField)), deleteLocalRef);
+  CLEAR_AND_RETURN_FALSE_ON_EXCEPTION
+  if (jniEtag) {
+    etag_ = env.ToStdString(jniEtag);
+  }
+
   // dataField is already cached above.
   const auto jniData =
       MakePointerScopeGuard(static_cast<jbyteArray>(env->GetObjectField(response, dataField)), deleteLocalRef);

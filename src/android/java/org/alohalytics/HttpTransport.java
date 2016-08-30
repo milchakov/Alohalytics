@@ -140,6 +140,11 @@ public class HttpTransport {
       p.contentType = connection.getContentType();
       p.contentEncoding = connection.getContentEncoding();
       final Map<String, List<String>> headers = connection.getHeaderFields();
+      if (headers != null && headers.containsKey("Etag")) {
+        final List<String> etags = headers.get("Etag");
+        if (etags != null && !etags.isEmpty())
+          p.eTag = etags.get(0);
+      }
       if (headers != null && headers.containsKey("Set-Cookie")) {
         p.cookies = "";
         for (final String value : headers.get("Set-Cookie")) {
@@ -201,6 +206,7 @@ public class HttpTransport {
     public String basicAuthUser = null;
     public String basicAuthPassword = null;
     public String cookies = null;
+    public String eTag = null;
     public int httpResponseCode = -1;
     public boolean debugMode = false;
     public boolean followRedirects = true;

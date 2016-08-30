@@ -61,6 +61,7 @@ class HTTPClientPlatformWrapper {
   std::string server_cookies_;
   // Cookies set by the client before request is run.
   std::string cookies_;
+  std::string etag_;
   bool debug_mode_ = false;
   bool handle_redirects_ = true;
 
@@ -214,6 +215,7 @@ class HTTPClientPlatformWrapper {
     }
     return std::string();
   }
+  std::string const & etag() const {return etag_;}
 };  // class HTTPClientPlatformWrapper
 
 }  // namespace alohalytics

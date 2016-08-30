@@ -128,6 +128,10 @@ bool HTTPClientPlatformWrapper::RunHTTPRequest() {
       if (cookies) {
         server_cookies_ = normalize_server_cookies(std::move([cookies UTF8String]));
       }
+      NSString * etag = [response.allHeaderFields objectForKey:@"Etag"];
+      if (etag) {
+        etag_ = std::move([etag UTF8String]);
+      }
       if (url_data) {
         if (received_file_.empty()) {
           server_response_.assign(reinterpret_cast<char const *>(url_data.bytes), url_data.length);
